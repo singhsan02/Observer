@@ -34,7 +34,8 @@ void Subject::Dettach(Observer* o){
 }
 void Subject::Notify(){
 	cout << "!!Lets Update all the Observers!!" << endl;
-	for (int i = 0; i < _observer.size(); ++i)
+	int count = _observer.size();
+	for (int i = 0; i < count; ++i)
 		(_observer[i])->Update(this);
 
 }
@@ -58,9 +59,11 @@ private:
 };
 DigitalClock::DigitalClock(ClockTimer* s){
 	_subject = s;
+	cout << "Its Time to Attach :" << typeid(this).name() << endl;
 	_subject->Attach(this);
 }
 DigitalClock::~DigitalClock(){
+	cout << "Its Time to Detach :" << typeid(this).name() << endl;
 	_subject->Dettach(this);
 }
 void DigitalClock::Update(Subject* theChangedSubject){
@@ -79,9 +82,11 @@ private:
 };
 AnalogClock::AnalogClock(ClockTimer* s){
 	_subject = s;
+	cout << "Its Time to Attach :" << typeid(this).name() << endl;
 	_subject->Attach(this);
 }
 AnalogClock::~AnalogClock(){
+	cout << "Its Time to Detach :" << typeid(this).name() << endl;
 	_subject->Dettach(this);
 }
 void AnalogClock::Update(Subject* theChangedSubject){
@@ -92,11 +97,14 @@ void AnalogClock::Update(Subject* theChangedSubject){
 
 int main()
 {
-	ClockTimer timer;
-	DigitalClock dc(&timer);
-	AnalogClock ac(&timer);
+	
+	{
+		ClockTimer timer;				//subject
+		DigitalClock dc(&timer);		//observer1
+		AnalogClock ac(&timer);			//observer2
 
-	timer.Tick();
+		timer.Tick();                  //Subject Changes,Observer should also gets Updates for the changes made in Subject.
+	}
 
 	system("pause");
 	return 0;
